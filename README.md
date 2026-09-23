@@ -1,6 +1,6 @@
-# 🎈 Suflici — 10 Aventuri cu Suflici
+# 🎈 Sclipici — 10 Aventuri cu Sclipici
 
-**Suflici** este o aplicație web interactivă creată pentru copii (4–7 ani), construită în jurul unui personaj haios din argilă și lână colorată — un spiriduș cu bucle arămii, pălărie de tweed și un năsuc rotund ca o bobiță roșie. Aplicația oferă 10 aventuri ilustrate, cu detalii artizanale, sunete interactive și povestire audio în limba română.
+**Sclipici** este o aplicație web interactivă creată pentru copii (4–7 ani), construită în jurul unui personaj haios din argilă și lână colorată — un spiriduș cu bucle arămii, pălărie de tweed și un năsuc rotund ca o bobiță roșie. Aplicația oferă 10 aventuri ilustrate, cu detalii artizanale, sunete interactive și povestire audio în limba română.
 
 > Un mic spiriduș haios din argilă și lână colorată, cu bucle arămii, pălărie de tweed și un năsuc rotund ca o bobiță roșie.
 
@@ -13,7 +13,7 @@
 
 ## ✨ Funcționalități
 
-- **10 Aventuri cu Suflici** — o galerie de episoade ilustrate (ex. *În Poiană*, *Micul Dejun*, *În Văzduh*), fiecare cu propria temă și stare emoțională a personajului.
+- **10 Aventuri cu Sclipici** — o galerie de episoade ilustrate (ex. *În Poiană*, *Micul Dejun*, *În Văzduh*), fiecare cu propria temă și stare emoțională a personajului.
 - **Cartea de Povești** — conținutul aventurilor prezentat ca o carte de povești pentru cei mici.
 - **Atelier de Colorat** — activități de colorat pornind de la imaginile personajului.
 - **Consistență AI & Prompturi** — set de prompturi și reguli folosite pentru a păstra aspectul personajului identic în toate cele 10 imagini generate.
@@ -45,7 +45,7 @@ Proiectul a fost generat cu [Google AI Studio](https://aistudio.google.com/).
 ## 📁 Structura proiectului
 
 ```
-Suflici/
+Sclipici/
 ├── public/
 │   └── images/          # Ilustrațiile celor 10 aventuri
 ├── src/                 # Codul sursă al aplicației React
@@ -71,8 +71,8 @@ Suflici/
 1. **Clonează repo-ul**
 
    ```bash
-   git clone https://github.com/msg4u/Suflici.git
-   cd Suflici
+   git clone https://github.com/msg4u/Sclipici.git
+   cd Sclipici
    ```
 
 2. **Instalează dependențele**
@@ -129,7 +129,7 @@ Suflici/
 
 ## 🎨 Despre personaj
 
-**Suflici** este proiectat pentru a rămâne vizual consistent în toate cele 10 aventuri: aceleași bucle arămii, aceeași pălărie de tweed, același năsuc rotund roșu — indiferent de scenă sau context. Consistența este menținută printr-un set dedicat de prompturi AI, documentate în secțiunea **Consistență AI & Prompturi** din aplicație.
+**Sclipici** este proiectat pentru a rămâne vizual consistent în toate cele 10 aventuri: aceleași bucle arămii, aceeași pălărie de tweed, același năsuc rotund roșu — indiferent de scenă sau context. Consistența este menținută printr-un set dedicat de prompturi AI, documentate în secțiunea **Consistență AI & Prompturi** din aplicație.
 
 ---
 
@@ -147,4 +147,4 @@ Contribuțiile sunt binevenite! Pentru a contribui:
 
 ## 🙋 Contact
 
-Pentru întrebări sau sugestii, deschide un [issue](https://github.com/msg4u/Suflici/issues) în acest repository.
+Pentru întrebări sau sugestii, deschide un [issue](https://github.com/msg4u/Sclipici/issues) în acest repository.
