@@ -1,6 +1,6 @@
 {
-  "name": "Suflici - 10 Aventuri cu Suflici",
-  "description": "Serie de 10 imagini și povești interactive pentru copii de 4-7 ani cu personajul Suflici, menținând consistența stilului prin AI.",
+  "name": "Sclipici - 10 Aventuri cu Sclipici",
+  "description": "Serie de 10 imagini și povești interactive pentru copii de 4-7 ani cu personajul Sclipici, menținând consistența stilului prin AI.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
