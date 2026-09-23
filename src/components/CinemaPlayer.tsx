@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Play, Pause, ChevronLeft, ChevronRight, X, Volume2, RotateCcw } from 'lucide-react';
 import { Scene } from '../types';
-import { playCuteSound, speakStory, stopSpeaking } from '../utils/audio';
+import { playCuteSound, playStoryAudio, stopStoryAudio } from '../utils/audio';
 
 interface CinemaPlayerProps {
   scenes: Scene[];
@@ -37,18 +37,22 @@ export const CinemaPlayer: React.FC<CinemaPlayerProps> = ({
     playCuteSound(currentScene.soundType, isMuted);
 
     if (autoNarrate) {
-      speakStory(`${currentScene.titleRo}. ${currentScene.storyRo}`, () => {
-        if (isPlaying) {
-          // Advance after a brief reading pause
-          setTimeout(() => {
-            goToNext();
-          }, 2500);
-        }
-      });
+      playStoryAudio(
+        currentScene.audioSrc,
+        () => {
+          if (isPlaying) {
+            // Advance after a brief reading pause
+            setTimeout(() => {
+              goToNext();
+            }, 2500);
+          }
+        },
+        `${currentScene.titleRo}. ${currentScene.storyRo}`
+      );
     }
 
     return () => {
-      stopSpeaking();
+      stopStoryAudio();
     };
   }, [currentIndex, autoNarrate, currentScene, isMuted, isPlaying, goToNext]);
 
@@ -112,7 +116,7 @@ export const CinemaPlayer: React.FC<CinemaPlayerProps> = ({
           <button
             id="cinema-close-btn"
             onClick={() => {
-              stopSpeaking();
+              stopStoryAudio();
               onClose();
             }}
             className="p-2 rounded-full bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white transition-colors cursor-pointer"
@@ -217,8 +221,12 @@ export const CinemaPlayer: React.FC<CinemaPlayerProps> = ({
               <button
                 id="cinema-replay-btn"
                 onClick={() => {
-                  stopSpeaking();
-                  speakStory(`${currentScene.titleRo}. ${currentScene.storyRo}`);
+                  stopStoryAudio();
+                  playStoryAudio(
+                    currentScene.audioSrc,
+                    undefined,
+                    `${currentScene.titleRo}. ${currentScene.storyRo}`
+                  );
                   playCuteSound(currentScene.soundType, isMuted);
                 }}
                 className="p-2.5 rounded-full bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white transition-colors cursor-pointer"

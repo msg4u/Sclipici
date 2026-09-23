@@ -97,7 +97,7 @@ export const ConsistencyStudio: React.FC<ConsistencyStudioProps> = ({ isMuted })
           <div className="flex items-center gap-2">
             <Wand2 className="w-5 h-5 text-amber-600" />
             <h3 className="font-display text-xl font-bold text-stone-900">
-              Creează o Nouă Aventură pentru Suflici
+              Creează o Nouă Aventură pentru Sclipici
             </h3>
           </div>
           <span className="text-xs text-stone-400 bg-stone-100 px-3 py-1 rounded-full">

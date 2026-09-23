@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookOpen, ChevronLeft, ChevronRight, Volume2, Sparkles, Printer } from 'lucide-react';
 import { Scene } from '../types';
-import { playCuteSound, speakStory, stopSpeaking } from '../utils/audio';
+import { playCuteSound, playStoryAudio, stopStoryAudio } from '../utils/audio';
 
 interface StoryBookViewProps {
   scenes: Scene[];
@@ -19,9 +19,28 @@ export const StoryBookView: React.FC<StoryBookViewProps> = ({
 
   const scene = scenes[currentPage];
 
+  useEffect(() => {
+    const handleAudioState = (e: Event) => {
+      const customEvent = e as CustomEvent<{ activeSrc: string | null; isPlaying: boolean }>;
+      if (customEvent.detail) {
+        if (customEvent.detail.activeSrc === scene.audioSrc && customEvent.detail.isPlaying) {
+          setIsSpeaking(true);
+        } else {
+          setIsSpeaking(false);
+        }
+      }
+    };
+
+    window.addEventListener('story-audio-state', handleAudioState);
+    return () => {
+      window.removeEventListener('story-audio-state', handleAudioState);
+      stopStoryAudio();
+    };
+  }, [scene.audioSrc]);
+
   const handleNext = () => {
     if (currentPage < scenes.length - 1) {
-      stopSpeaking();
+      stopStoryAudio();
       setIsSpeaking(false);
       playCuteSound('click', isMuted);
       setCurrentPage((prev) => prev + 1);
@@ -30,7 +49,7 @@ export const StoryBookView: React.FC<StoryBookViewProps> = ({
 
   const handlePrev = () => {
     if (currentPage > 0) {
-      stopSpeaking();
+      stopStoryAudio();
       setIsSpeaking(false);
       playCuteSound('click', isMuted);
       setCurrentPage((prev) => prev - 1);
@@ -39,14 +58,16 @@ export const StoryBookView: React.FC<StoryBookViewProps> = ({
 
   const handleToggleNarrate = () => {
     if (isSpeaking) {
-      stopSpeaking();
+      stopStoryAudio();
       setIsSpeaking(false);
     } else {
       setIsSpeaking(true);
       playCuteSound('click', isMuted);
-      speakStory(`${scene.titleRo}. ${scene.storyRo}`, () => {
-        setIsSpeaking(false);
-      });
+      playStoryAudio(
+        scene.audioSrc,
+        () => setIsSpeaking(false),
+        `${scene.titleRo}. ${scene.storyRo}`
+      );
     }
   };
 
@@ -57,7 +78,7 @@ export const StoryBookView: React.FC<StoryBookViewProps> = ({
         <div className="flex items-center gap-2 text-amber-950">
           <BookOpen className="w-5 h-5 text-amber-700" />
           <span className="font-display font-bold text-base">
-            Cartea de Povești cu Suflici
+            Cartea de Povești cu Sclipici
           </span>
           <span className="text-xs bg-amber-200/80 text-amber-900 px-2.5 py-0.5 rounded-full font-semibold">
             Pagina {currentPage + 1} din {scenes.length}

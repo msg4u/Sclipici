@@ -1,4 +1,4 @@
-// Kid-friendly Web Audio Synthesizer - pure procedural synthesis with zero external asset dependencies
+// Kid-friendly Web Audio Synthesizer & Instant Audio Player for Sclipici Stories
 let audioCtx: AudioContext | null = null;
 
 function getAudioContext(): AudioContext | null {
@@ -219,7 +219,148 @@ export function playCuteSound(sound: string, isMuted = false) {
   }
 }
 
-// Web Speech API Narrator in Romanian (or browser fallback)
+// -------------------------------------------------------------
+// INSTANT AUDIO PLAYER FOR SCLIPICI'S 10 STORIES
+// Pre-recorded with a warm, gentle, friendly Romanian female voice (Alina Neural)
+// Zero latency, cross-device & cross-browser identical playback
+// -------------------------------------------------------------
+
+const audioCache = new Map<string, HTMLAudioElement>();
+let currentAudio: HTMLAudioElement | null = null;
+let currentOnEndCallback: (() => void) | null = null;
+let activeAudioSrc: string | null = null;
+
+function notifyAudioChange(src: string | null, isPlaying: boolean) {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(
+      new CustomEvent('story-audio-state', {
+        detail: { activeSrc: src, isPlaying },
+      })
+    );
+  }
+}
+
+/**
+ * Preload all 10 audio story files so they load instantly with zero delay
+ */
+export function preloadAllStoryAudios(sources: string[]) {
+  if (typeof window === 'undefined') return;
+  sources.forEach((src) => {
+    if (!audioCache.has(src)) {
+      const audio = new Audio();
+      audio.preload = 'auto';
+      audio.src = src;
+      // Pre-warm audio element metadata
+      audio.load();
+      audioCache.set(src, audio);
+    }
+  });
+}
+
+/**
+ * Play a story audio file instantly
+ */
+export function playStoryAudio(
+  audioSrc: string,
+  onEnd?: () => void,
+  fallbackText?: string
+): void {
+  if (typeof window === 'undefined') return;
+
+  // Stop currently playing audio or speech synthesis
+  stopStoryAudio();
+
+  let audio = audioCache.get(audioSrc);
+  if (!audio) {
+    audio = new Audio(audioSrc);
+    audio.preload = 'auto';
+    audioCache.set(audioSrc, audio);
+  }
+
+  currentAudio = audio;
+  activeAudioSrc = audioSrc;
+  currentOnEndCallback = onEnd || null;
+
+  const handleEnd = () => {
+    if (currentAudio === audio) {
+      currentAudio = null;
+      activeAudioSrc = null;
+      notifyAudioChange(null, false);
+    }
+    if (onEnd) onEnd();
+  };
+
+  audio.onended = handleEnd;
+  audio.onerror = () => {
+    console.warn(`Could not play ${audioSrc}, falling back to speech synthesis`);
+    if (fallbackText) {
+      speakStory(fallbackText, onEnd);
+    } else if (onEnd) {
+      onEnd();
+    }
+  };
+
+  // Reset to beginning and play immediately
+  audio.currentTime = 0;
+  const playPromise = audio.play();
+  notifyAudioChange(audioSrc, true);
+
+  if (playPromise !== undefined) {
+    playPromise.catch((err) => {
+      console.warn('Audio play failed or was interrupted:', err);
+      notifyAudioChange(null, false);
+      if (fallbackText) {
+        speakStory(fallbackText, onEnd);
+      } else if (onEnd) {
+        onEnd();
+      }
+    });
+  }
+}
+
+export function pauseStoryAudio(): void {
+  if (currentAudio && !currentAudio.paused) {
+    currentAudio.pause();
+    notifyAudioChange(activeAudioSrc, false);
+  }
+}
+
+export function resumeStoryAudio(): void {
+  if (currentAudio && currentAudio.paused) {
+    currentAudio.play().then(() => {
+      notifyAudioChange(activeAudioSrc, true);
+    }).catch(console.warn);
+  }
+}
+
+export function stopStoryAudio(): void {
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio.onended = null;
+    currentAudio.onerror = null;
+    currentAudio = null;
+  }
+  activeAudioSrc = null;
+  currentOnEndCallback = null;
+  notifyAudioChange(null, false);
+}
+
+export function isStoryAudioPlaying(audioSrc?: string): boolean {
+  if (!currentAudio) return false;
+  if (audioSrc && activeAudioSrc !== audioSrc) return false;
+  return !currentAudio.paused && !currentAudio.ended;
+}
+
+export function getActiveAudioSrc(): string | null {
+  return activeAudioSrc;
+}
+
+// Fallback Speech API Narrator (used only if static audio fails)
 export function speakStory(text: string, onEnd?: () => void) {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
     if (onEnd) onEnd();
@@ -228,13 +369,15 @@ export function speakStory(text: string, onEnd?: () => void) {
 
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 0.9; // Calm, gentle pace for 4-7 year olds
-  utterance.pitch = 1.1; // Friendly and warm
+  utterance.rate = 0.88; // Calm, gentle pace for 4-7 year olds
+  utterance.pitch = 1.15; // Friendly, warm maternal tone
   utterance.lang = 'ro-RO';
 
   // Try finding a Romanian voice if available
   const voices = window.speechSynthesis.getVoices();
-  const roVoice = voices.find(v => v.lang.startsWith('ro')) || voices.find(v => v.name.includes('Romanian'));
+  const roVoice = voices.find(v => v.lang.startsWith('ro') && (v.name.includes('Alina') || v.name.includes('Elena') || v.name.includes('Female') || v.name.includes('Natural'))) ||
+                  voices.find(v => v.lang.startsWith('ro')) || 
+                  voices.find(v => v.name.includes('Romanian'));
   if (roVoice) {
     utterance.voice = roVoice;
   }
@@ -250,7 +393,5 @@ export function speakStory(text: string, onEnd?: () => void) {
 }
 
 export function stopSpeaking() {
-  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-  }
+  stopStoryAudio();
 }

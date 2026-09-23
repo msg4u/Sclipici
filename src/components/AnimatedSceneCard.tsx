@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { Volume2, Sparkles, HelpCircle, Download, Copy, Check, Play, Pause, Maximize2 } from 'lucide-react';
 import { Scene } from '../types';
-import { playCuteSound, speakStory, stopSpeaking } from '../utils/audio';
+import { playCuteSound, playStoryAudio, stopStoryAudio, isStoryAudioPlaying } from '../utils/audio';
 import { WATERMARK_TEXT } from '../data/scenes';
 
 interface AnimatedSceneCardProps {
@@ -22,20 +22,40 @@ export const AnimatedSceneCard: React.FC<AnimatedSceneCardProps> = ({
   const [answeredQuestion, setAnsweredQuestion] = useState(false);
   const [copiedPrompt, setCopiedPrompt] = useState(false);
 
+  useEffect(() => {
+    const handleAudioState = (e: Event) => {
+      const customEvent = e as CustomEvent<{ activeSrc: string | null; isPlaying: boolean }>;
+      if (customEvent.detail) {
+        if (customEvent.detail.activeSrc === scene.audioSrc && customEvent.detail.isPlaying) {
+          setIsSpeaking(true);
+        } else {
+          setIsSpeaking(false);
+        }
+      }
+    };
+
+    window.addEventListener('story-audio-state', handleAudioState);
+    return () => {
+      window.removeEventListener('story-audio-state', handleAudioState);
+    };
+  }, [scene.audioSrc]);
+
   const handlePlaySound = () => {
     playCuteSound(scene.soundType, isMuted);
   };
 
   const toggleSpeech = () => {
     if (isSpeaking) {
-      stopSpeaking();
+      stopStoryAudio();
       setIsSpeaking(false);
     } else {
       setIsSpeaking(true);
       playCuteSound('click', isMuted);
-      speakStory(`${scene.titleRo}. ${scene.storyRo}`, () => {
-        setIsSpeaking(false);
-      });
+      playStoryAudio(
+        scene.audioSrc,
+        () => setIsSpeaking(false),
+        `${scene.titleRo}. ${scene.storyRo}`
+      );
     }
   };
 
@@ -71,7 +91,7 @@ export const AnimatedSceneCard: React.FC<AnimatedSceneCardProps> = ({
   const handleDownloadImage = () => {
     const link = document.createElement('a');
     link.href = scene.imageSrc;
-    link.download = `Suflici_${scene.id}_${scene.titleEn.replace(/\s+/g, '_')}.jpg`;
+    link.download = `Sclipici_${scene.id}_${scene.titleEn.replace(/\s+/g, '_')}.jpg`;
     link.click();
     playCuteSound('click', isMuted);
   };

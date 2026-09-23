@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Sparkles,
   Film,
@@ -25,7 +25,7 @@ import { CinemaPlayer } from './components/CinemaPlayer';
 import { StoryBookView } from './components/StoryBookView';
 import { ActivityGenerator } from './components/ActivityGenerator';
 import { ConsistencyStudio } from './components/ConsistencyStudio';
-import { playCuteSound, stopSpeaking } from './utils/audio';
+import { playCuteSound, stopStoryAudio, preloadAllStoryAudios } from './utils/audio';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<ViewMode>('showcase');
@@ -34,8 +34,13 @@ export default function App() {
   const [selectedForColoring, setSelectedForColoring] = useState<Scene>(SCENES[0]);
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
 
+  useEffect(() => {
+    // Preload all 10 audio story files for instant zero-delay playback
+    preloadAllStoryAudios(SCENES.map((s) => s.audioSrc));
+  }, []);
+
   const handleTabChange = (tab: ViewMode) => {
-    stopSpeaking();
+    stopStoryAudio();
     playCuteSound('click', isMuted);
     setActiveTab(tab);
   };
@@ -65,7 +70,7 @@ export default function App() {
       setTimeout(() => {
         const link = document.createElement('a');
         link.href = scene.imageSrc;
-        link.download = `Suflici_${scene.id}_${scene.titleEn.replace(/\s+/g, '_')}.jpg`;
+        link.download = `Sclipici_${scene.id}_${scene.titleEn.replace(/\s+/g, '_')}.jpg`;
         link.click();
       }, index * 250);
     });
@@ -84,10 +89,10 @@ export default function App() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="font-display text-xl sm:text-2xl font-bold text-stone-900 leading-none">
-                  Suflici
+                  Sclipici
                 </h1>
                 <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
-                  10 Aventuri cu Suflici
+                  10 Aventuri cu Sclipici
                 </span>
                 <span className="hidden md:inline-block px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-100 text-amber-900">
                   Vârstă 4-7 Ani
@@ -129,7 +134,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-stone-100 flex items-center justify-between overflow-x-auto py-2">
           <nav className="flex space-x-1 sm:space-x-2">
             {[
-              { id: 'showcase', label: '10 Aventuri cu Suflici', icon: Grid, count: '10' },
+              { id: 'showcase', label: '10 Aventuri cu Sclipici', icon: Grid, count: '10' },
               { id: 'book', label: 'Cartea de Povești', icon: BookOpen },
               { id: 'coloring', label: 'Atelier de Colorat', icon: Paintbrush },
               { id: 'studio', label: 'Consistență AI & Promturi', icon: ShieldCheck },
@@ -184,7 +189,7 @@ export default function App() {
                   <span>Creat special pentru cei mici (4-7 ani)</span>
                 </div>
                 <h2 className="font-display text-2xl sm:text-3xl font-bold text-stone-900">
-                  Faceți cunoștință cu Suflici! 🎈
+                  Faceți cunoștință cu Sclipici! 🎈
                 </h2>
                 <p className="text-sm text-stone-600 leading-relaxed">
                   Un mic spiriduș haios din argilă și lână colorată, cu bucle arămii, pălărie de tweed și un năsuc rotund ca o bobiță roșie. 
@@ -246,7 +251,7 @@ export default function App() {
       <footer className="mt-auto border-t border-stone-200 bg-white py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
           <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
-            <span className="font-display font-bold text-stone-800 text-sm">Suflici</span>
+            <span className="font-display font-bold text-stone-800 text-sm">Sclipici</span>
             <span className="hidden sm:inline">•</span>
             <span className="text-stone-600 font-medium">
               @2026 by Suflețel Concept creat cu ❤️ pentru copii și părinți deopotrivă

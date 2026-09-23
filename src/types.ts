@@ -7,6 +7,7 @@ export interface Scene {
   questionForKids: string;
   imageSrc: string;
   coloringImageSrc: string;
+  audioSrc: string;
   soundType: 'butterfly' | 'crunch' | 'balloon' | 'peekaboo' | 'turtle' | 'splash' | 'chirp' | 'bubbles' | 'tower' | 'lullaby';
   animationMood: 'flutter' | 'munch' | 'float' | 'peek' | 'crawl' | 'splash' | 'story' | 'sparkle' | 'balance' | 'sleep';
   characterEmotion: string;

@@ -102,7 +102,7 @@ export const ActivityGenerator: React.FC<ActivityGeneratorProps> = ({
       ctx.fillStyle = '#1c1917';
       ctx.font = 'bold 18px "Baloo 2", Nunito, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(`Suflici • Episodul ${activeScene.id}: ${activeScene.titleRo}`, w / 2, h - 30);
+      ctx.fillText(`Sclipici • Episodul ${activeScene.id}: ${activeScene.titleRo}`, w / 2, h - 30);
 
       ctx.fillStyle = '#78716c';
       ctx.font = '500 11px "Baloo 2", Nunito, sans-serif';
@@ -332,7 +332,7 @@ export const ActivityGenerator: React.FC<ActivityGeneratorProps> = ({
     if (!cleanLineArtCanvasRef.current) return;
     const link = document.createElement('a');
     link.href = cleanLineArtCanvasRef.current.toDataURL('image/png');
-    link.download = `Plansa_Colorat_Curata_Suflici_Ep${activeScene.id}.png`;
+    link.download = `Plansa_Colorat_Curata_Sclipici_Ep${activeScene.id}.png`;
     link.click();
   };
 
@@ -343,7 +343,7 @@ export const ActivityGenerator: React.FC<ActivityGeneratorProps> = ({
     if (!canvas) return;
     const link = document.createElement('a');
     link.href = canvas.toDataURL('image/png');
-    link.download = `Desenul_Meu_Colorat_Suflici_Ep${activeScene.id}.png`;
+    link.download = `Desenul_Meu_Colorat_Sclipici_Ep${activeScene.id}.png`;
     link.click();
   };
 
@@ -363,7 +363,7 @@ export const ActivityGenerator: React.FC<ActivityGeneratorProps> = ({
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-amber-500" />
             <h3 className="font-display text-base font-bold text-stone-900">
-              Alege una din cele 10 Planșe de Colorat cu Suflici:
+              Alege una din cele 10 Planșe de Colorat cu Sclipici:
             </h3>
           </div>
           <span className="text-xs text-stone-400 font-medium hidden sm:inline">
@@ -594,7 +594,7 @@ export const ActivityGenerator: React.FC<ActivityGeneratorProps> = ({
             {/* Color Palette for Kids */}
             <div className="bg-white p-3.5 rounded-xl border border-stone-200 shadow-2xs space-y-2">
               <label className="text-xs font-bold text-stone-800 block">
-                Paletă de Culori pentru Suflici:
+                Paletă de Culori pentru Sclipici:
               </label>
               <div className="grid grid-cols-6 gap-2">
                 {PALETTE.map((item) => (
