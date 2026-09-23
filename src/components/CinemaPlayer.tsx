@@ -148,13 +148,6 @@ export const CinemaPlayer: React.FC<CinemaPlayerProps> = ({
             referrerPolicy="no-referrer"
             className="w-full h-full object-cover select-none"
           />
-
-          {/* Watermark in bottom of image */}
-          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-stone-950 via-stone-950/80 to-transparent pt-6 pb-2.5 px-3 z-30 pointer-events-none text-center">
-            <p className="text-xs sm:text-sm text-amber-200 font-semibold tracking-wide drop-shadow-md">
-              @2026 by Suflețel Concept creat cu ❤️ pentru copii și părinți deopotrivă
-            </p>
-          </div>
         </div>
 
         {/* Next Button */}

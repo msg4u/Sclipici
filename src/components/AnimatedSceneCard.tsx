@@ -3,7 +3,6 @@ import confetti from 'canvas-confetti';
 import { Volume2, Sparkles, HelpCircle, Download, Copy, Check, Play, Pause, Maximize2 } from 'lucide-react';
 import { Scene } from '../types';
 import { playCuteSound, playStoryAudio, stopStoryAudio, isStoryAudioPlaying } from '../utils/audio';
-import { WATERMARK_TEXT } from '../data/scenes';
 
 interface AnimatedSceneCardProps {
   scene: Scene;
@@ -139,7 +138,7 @@ export const AnimatedSceneCard: React.FC<AnimatedSceneCardProps> = ({
         </div>
 
         {/* Audio / Story Interactive Triggers */}
-        <div className="absolute bottom-9 left-3 right-3 flex items-center justify-between z-20">
+        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between z-20">
           <button
             id={`sound-btn-${scene.id}`}
             onClick={handlePlaySound}
@@ -170,13 +169,6 @@ export const AnimatedSceneCard: React.FC<AnimatedSceneCardProps> = ({
               </>
             )}
           </button>
-        </div>
-
-        {/* REQUIRED WATERMARK: in the bottom part of the image */}
-        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-stone-950 via-stone-950/80 to-transparent pt-4 pb-2 px-2 z-20 text-center pointer-events-none">
-          <p className="text-[10px] sm:text-[11px] text-amber-200/95 font-medium tracking-wide drop-shadow-sm">
-            {WATERMARK_TEXT}
-          </p>
         </div>
       </div>
 

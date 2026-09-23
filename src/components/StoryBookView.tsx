@@ -116,12 +116,6 @@ export const StoryBookView: React.FC<StoryBookViewProps> = ({
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover"
             />
-            {/* Watermark in bottom of image */}
-            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-stone-950 via-stone-950/80 to-transparent pt-4 pb-2 px-2.5 z-20 text-center pointer-events-none">
-              <p className="text-[10px] sm:text-[11px] text-amber-200 font-medium tracking-wide drop-shadow-sm">
-                @2026 by Suflețel Concept creat cu ❤️ pentru copii și părinți deopotrivă
-              </p>
-            </div>
             <div className="absolute top-2 right-2 bg-black/60 text-white text-[11px] px-2 py-0.5 rounded-md backdrop-blur-xs font-semibold">
               Foto {scene.id}
             </div>
